@@ -15,12 +15,12 @@ type GalleryItem = {
 };
 
 const GALLERY_ITEMS: GalleryItem[] = [
-  { image: "/gallery/gallery1.jpeg", alt: "Mural detail, close crop" },
-  { image: "/gallery/gallery2.jpeg", alt: "Community mural in progress" },
-  { image: "/gallery/gallery3.jpeg", alt: "Full wall mural, wide shot" },
-  { image: "/gallery/gallery4.jpeg", alt: "Floor mural, overhead view" },
-  { image: "/gallery/gallery5.jpeg", alt: "Sarah painting on site" },
-  { image: "/gallery/gallery6.jpeg", alt: "Character detail from a mural" },
+  { image: "/Gallery/gallery1.jpeg", alt: "Mural detail, close crop" },
+  { image: "/Gallery/gallery2.jpeg", alt: "Community mural in progress" },
+  { image: "/Gallery/gallery3.jpeg", alt: "Full wall mural, wide shot" },
+  { image: "/Gallery/gallery4.jpeg", alt: "Floor mural, overhead view" },
+  { image: "/Gallery/gallery5.jpeg", alt: "Sarah painting on site" },
+  { image: "/Gallery/gallery6.jpeg", alt: "Character detail from a mural" },
   { image: "/gallery/gallery7.jpeg", alt: "Commercial mural exterior" },
   { image: "/gallery/gallery8.jpeg", alt: "Colour palette close-up" },
   { image: "/gallery/gallery9.jpeg", alt: "School mural, full view" },
