@@ -21,10 +21,10 @@ const GALLERY_ITEMS: GalleryItem[] = [
   { image: "/Gallery/gallery4.jpeg", alt: "Floor mural, overhead view" },
   { image: "/Gallery/gallery5.jpeg", alt: "Sarah painting on site" },
   { image: "/Gallery/gallery6.jpeg", alt: "Character detail from a mural" },
-  { image: "/gallery/gallery7.jpeg", alt: "Commercial mural exterior" },
-  { image: "/gallery/gallery8.jpeg", alt: "Colour palette close-up" },
-  { image: "/gallery/gallery9.jpeg", alt: "School mural, full view" },
-  { image: "/gallery/gallery10.jpeg", alt: "Finished mural, golden hour" },
+  { image: "/Gallery/gallery7.jpeg", alt: "Commercial mural exterior" },
+  { image: "/Gallery/gallery8.jpeg", alt: "Colour palette close-up" },
+  { image: "/Gallery/gallery9.jpeg", alt: "School mural, full view" },
+  { image: "/Gallery/gallery10.jpeg", alt: "Finished mural, golden hour" },
 ];
 
 const containerVariants = {
