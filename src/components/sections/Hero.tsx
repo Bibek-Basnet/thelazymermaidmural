@@ -81,16 +81,16 @@ export default function Hero() {
 
         <div className="mt-7 flex flex-wrap items-center justify-center gap-3 sm:mt-9 sm:gap-4">
           <Link
-            href="/#portfolio"
+            href="/portfolio"
             className="rounded-blob bg-magenta px-6 py-3 font-body text-sm font-bold text-cream transition-transform duration-200 hover:scale-105 sm:px-7"
           >
             See the work
           </Link>
           <Link
-            href="/#contact"
+            href="/#services"
             className="rounded-blob border-2 border-cream px-6 py-3 font-body text-sm font-bold text-cream transition-colors duration-200 hover:bg-cream hover:text-ink sm:px-7"
           >
-            Contact me
+            My Services
           </Link>
         </div>
       </div>

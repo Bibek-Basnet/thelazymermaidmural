@@ -23,7 +23,7 @@ const TESTIMONIALS: Testimonial[] = [
   {
     quote:
       "Sarah did an amazing job on the mural in our newborn's nursery. I had an ocean theme in mind and she blended it so beautifully with the existing colours in the room. It turned out even better than we imagined.",
-    attribution: "Taylor and Brandon — Nursery Mural",
+    attribution: "Taylor and Brandon - Nursery Mural",
     color: "#FFB162",
     soft: "#FAEEDA",
     dark: "#412402",
@@ -106,7 +106,7 @@ export default function Testimonials() {
     const track = trackRef.current;
     if (!track) return;
 
-    // Track renders the list twice back to back — animate exactly one
+    // Track renders the list twice back to back - animate exactly one
     // copy's width so the loop point is invisible.
     const singleSetWidth = track.scrollWidth / 2;
 

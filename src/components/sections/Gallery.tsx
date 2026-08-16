@@ -107,7 +107,7 @@ export default function Gallery() {
             href="/portfolio"
             className="group inline-flex w-fit items-center gap-1.5 rounded-full border-2 border-ink px-5 py-2.5 text-sm font-bold text-ink transition-all duration-300 hover:gap-2.5 hover:border-magenta hover:bg-magenta hover:text-cream"
           >
-            View full gallery
+            View my portfolio
             <i
               className="ti ti-arrow-right text-base transition-transform duration-300 group-hover:translate-x-0.5"
               aria-hidden="true"

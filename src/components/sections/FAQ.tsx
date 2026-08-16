@@ -13,25 +13,25 @@ const FAQ_ITEMS: FAQItem[] = [
   {
     question: "How much does a mural cost?",
     answer:
-      "It depends on the size, surface and complexity of the design. After a chat about your space and vision, I'll put together a personalised quote — most residential murals sit within a 600–3000 NZD range, but public and commercial work varies more.",
+      "It depends on the size, surface and complexity of the design. After a chat about your space and vision, I'll put together a personalised quote - most residential murals sit within a 600–3000 NZD range, but public and commercial work varies more.",
     color: "#D93E87",
   },
   {
     question: "Do you need a deposit before starting?",
     answer:
-      "Yes — a 50% deposit secures your booking and we move into the design stage. The remaining 50% is due once your mural is complete.",
+      "Yes - a 50% deposit secures your booking and we move into the design stage. The remaining 50% is due once your mural is complete.",
     color: "#FFB162",
   },
   {
     question: "What surfaces can you paint on?",
     answer:
-      "Walls, floors, coffee trailers, electrical boxes, shipping containers, buses — if it holds paint, it's probably fair game. Send a photo of your space and I'll let you know what prep it needs.",
+      "Walls, floors, coffee trailers, electrical boxes, shipping containers, buses - if it holds paint, it's probably fair game. Send a photo of your space and I'll let you know what prep it needs.",
     color: "#5EC1CF",
   },
   {
     question: "How long does a mural take?",
     answer:
-      "Smaller interior pieces can take a few days, larger exterior or public murals can take a couple of weeks. Weather, surface condition and design complexity all play a part — I'll give you a realistic timeframe once I've seen the space.",
+      "Smaller interior pieces can take a few days, larger exterior or public murals can take a couple of weeks. Weather, surface condition and design complexity all play a part - I'll give you a realistic timeframe once I've seen the space.",
     color: "#F09580",
   },
   {
@@ -43,7 +43,7 @@ const FAQ_ITEMS: FAQItem[] = [
   {
     question: "Will the mural hold up outdoors?",
     answer:
-      "Yes — exterior murals are painted with quality outdoor paints and finished with a protective sealant, so they're built to handle sun, rain and everyday wear.",
+      "Yes - exterior murals are painted with quality outdoor paints and finished with a protective sealant, so they're built to handle sun, rain and everyday wear.",
     color: "#FFB162",
   },
 ];

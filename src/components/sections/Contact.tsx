@@ -70,7 +70,7 @@ function ContactForm() {
           Message sent
         </p>
         <p className="mt-2 max-w-xs text-sm text-ink-soft">
-          Thanks for reaching out — Sarah will be in touch soon to arrange a free
+          Thanks for reaching out - Sarah will be in touch soon to arrange a free
           consultation.
         </p>
       </div>
@@ -226,7 +226,7 @@ export default function Contact() {
             your space.
           </p>
           <p className="mt-4 text-[15px] leading-relaxed text-ink-soft">
-            Let&apos;s take the first step to bring your mural idea to life —
+            Let&apos;s take the first step to bring your mural idea to life -
             I can&apos;t wait to find out more about your project!
           </p>
 

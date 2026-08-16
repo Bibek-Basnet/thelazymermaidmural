@@ -41,7 +41,7 @@ export default function About() {
         </motion.div>
 
         <div className="mt-14 grid gap-12 lg:grid-cols-12 lg:gap-16">
-          {/* Portrait + action shot, stacked — fills the left column
+          {/* Portrait + action shot, stacked - fills the left column
               naturally regardless of how long the story text runs,
               instead of a single sticky photo that leaves empty space
               once the text outgrows it */}
@@ -54,7 +54,7 @@ export default function About() {
             className="relative lg:col-span-5"
           >
             <div className="relative mx-auto max-w-sm lg:max-w-none">
-              {/* Offset colour block behind the photo — the curves + squares
+              {/* Offset colour block behind the photo - the curves + squares
                   pairing carried over from the brand brief */}
               <div
                 className="absolute -bottom-5 -right-5 h-full w-full rounded-[var(--radius-blob)] bg-[var(--color-mango)] lg:-bottom-6 lg:-right-6"
@@ -118,7 +118,7 @@ export default function About() {
               </p>
               <p>
                 Originally from Cornwall in the UK, I&rsquo;ve called New
-                Zealand home since 2014 — creating vibrant, colourful artwork
+                Zealand home since 2014 - creating vibrant, colourful artwork
                 wherever I can.
               </p>
               <p>
@@ -169,20 +169,20 @@ export default function About() {
                 <p>Honestly&hellip; it was completely accidental.</p>
                 <p>
                   I was trying to come up with the perfect name for my mural
-                  business — something playful, colourful and a little bit
+                  business - something playful, colourful and a little bit
                   different. Then one day, my neighbour&rsquo;s daughter came
                   over to see if my daughter wanted to play.
                 </p>
                 <p>
                   She spotted me curled up under a blanket on the sofa
                   (which, to be fair, is exactly where you&rsquo;ll usually
-                  find me when I&rsquo;m not painting — horizontal, at home
+                  find me when I&rsquo;m not painting - horizontal, at home
                   on the hillside with my cat).
                 </p>
                 <p>She took one look at me and bluntly announced:</p>
               </div>
 
-              {/* Pull-quote — the emotional centre of the story, where the
+              {/* Pull-quote - the emotional centre of the story, where the
                   business name was literally born */}
               <blockquote className="relative my-10 border-l-4 border-[var(--color-magenta)] pl-6 lg:pl-8">
                 <p className="font-[var(--font-fraunces)] text-3xl italic leading-snug text-[var(--color-magenta)] lg:text-4xl">

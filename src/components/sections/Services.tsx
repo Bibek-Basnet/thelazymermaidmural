@@ -93,7 +93,7 @@ function ServiceTile({ service }: { service: Service }) {
       strokeDashoffset: length,
     });
 
-    // Draw in once the tile enters the viewport — works identically on
+    // Draw in once the tile enters the viewport - works identically on
     // mobile (no hover) and desktop (first reveal), independent of hover.
     const trigger = ScrollTrigger.create({
       trigger: tile,

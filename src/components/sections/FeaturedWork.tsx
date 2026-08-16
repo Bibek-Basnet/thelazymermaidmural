@@ -22,7 +22,7 @@ type Project = {
 };
 
 // Ordered by importance per client brief. Swap `image` paths once final
-// photo filenames are confirmed. Add/remove projects freely — numbering
+// photo filenames are confirmed. Add/remove projects freely - numbering
 // and scroll distance are derived from this array's length, nothing is
 // hardcoded to "6".
 const PROJECTS: Project[] = [
@@ -40,7 +40,7 @@ const PROJECTS: Project[] = [
     title: "Interactive Floor Murals",
     size: "12–18 sqm each",
     description:
-      "Four playable floors — the floor is water, the floor is lava, shell hop, desert hop.",
+      "Four playable floors - the floor is water, the floor is lava, shell hop, desert hop.",
     image: "/work/work2.jpeg",
     slug: "interactive-floor-murals",
   },
@@ -101,7 +101,7 @@ export default function FeaturedWork() {
     if (!section || !track) return;
 
     // Measure the section's actual rendered width rather than trusting
-    // 100vw — vw includes the scrollbar gutter in most browsers, which
+    // 100vw - vw includes the scrollbar gutter in most browsers, which
     // was quietly desyncing the scroll math over multiple cards.
     const setSlideWidth = () => {
       const width = section.getBoundingClientRect().width;
@@ -210,7 +210,7 @@ export default function FeaturedWork() {
   aria-label="Featured work"
   className="relative flex flex-col overflow-hidden bg-[var(--color-peach)] lg:h-screen"
 >
-      {/* Static header band — sits above the image, not on top of it */}
+      {/* Static header band - sits above the image, not on top of it */}
       <div className="relative z-10 shrink-0 p-6 lg:p-16 lg:pb-8">
         <p className="font-[var(--font-jakarta)] text-sm font-bold uppercase tracking-wide text-[var(--color-magenta)]">
           Featured work

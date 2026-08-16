@@ -1,229 +1,175 @@
-// src/components/sections/Footer.tsx
 "use client";
 
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
-import {
-  FaInstagram,
-  FaFacebook,
-  FaPinterest,
-  FaEnvelope,
-  FaPhone,
-  FaMapMarkerAlt,
-} from "react-icons/fa";
-import { cn } from "@/lib/utils/cn";
+import { siInstagram, siWhatsapp } from "simple-icons";
+import { HiOutlineMail } from "react-icons/hi";
 
-const FOOTER_LINKS = {
-  services: [
-    { label: "Custom Murals", href: "/services#custom" },
-    { label: "Commercial Murals", href: "/services#commercial" },
-    { label: "Residential Murals", href: "/services#residential" },
-    { label: "Restoration", href: "/services#restoration" },
-  ],
-  company: [
-    { label: "About", href: "/#about" },
-    { label: "Gallery", href: "/#gallery" },
-    { label: "Process", href: "/#process" },
-    { label: "Contact", href: "/#contact" },
-  ],
-  support: [
-    { label: "FAQ", href: "/faq" },
-    { label: "Careers", href: "/careers" },
-    { label: "Blog", href: "/blog" },
-    { label: "Testimonials", href: "/testimonials" },
-  ],
-};
-
-const SOCIAL_ICONS = [
-  { icon: FaInstagram, href: "https://instagram.com", label: "Instagram" },
-  { icon: FaFacebook, href: "https://facebook.com", label: "Facebook" },
-  { icon: FaPinterest, href: "https://pinterest.com", label: "Pinterest" },
+const QUICK_LINKS = [
+  { label: "Work", href: "/#work" },
+  { label: "About", href: "/#about" },
+  { label: "Services", href: "/#services" },
+  { label: "Process", href: "/#process" },
+  { label: "Gallery", href: "/#gallery" },
+  { label: "Contact", href: "/#contact" },
 ];
 
+const LEGAL_LINKS = [
+  { label: "Privacy Policy", href: "/privacy-policy" },
+  { label: "Terms & Conditions", href: "/terms-and-conditions" },
+  { label: "Refund & Cancellation", href: "/refund-and-cancellation" },
+];
+
+const INSTAGRAM_URL = "https://instagram.com/thelazymermaidmurals";
+const WHATSAPP_URL = "https://wa.me/64000000000"; // replace with real number
+const EMAIL_ADDRESS = "hello@thelazymermaid.nz";
+
+function scrollToSection(href: string) {
+  if (!href.includes("#")) return false;
+  const id = href.split("#")[1];
+  const target = document.getElementById(id);
+  if (!target) return false;
+
+  if (window.lenisInstance) {
+    window.lenisInstance.scrollTo(target, { offset: -80, duration: 1.2 });
+  } else {
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  return true;
+}
+
+function SimpleIconSvg({
+  path,
+  className,
+}: {
+  path: string;
+  className?: string;
+}) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d={path} />
+    </svg>
+  );
+}
+
 export default function Footer() {
-  const currentYear = new Date().getFullYear();
+  const year = new Date().getFullYear();
+
+  const handleQuickLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    const handled = scrollToSection(href);
+    if (handled) e.preventDefault();
+  };
 
   return (
-    <footer className="relative bg-ink text-cream">
-      {/* Subtle gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-ink/0 via-ink-soft/5 to-transparent pointer-events-none" />
-      
-      {/* Decorative line */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-mango/30 to-transparent" />
+    <footer className="relative overflow-hidden bg-ink px-6 pb-8 pt-16 lg:px-16 lg:pt-24">
+      {/* Soft brand-color glow, mirrors the blob motif used in Hero/About */}
+      <div
+        className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-magenta opacity-10 blur-3xl"
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none absolute -right-16 bottom-0 h-64 w-64 rounded-full bg-lagoon opacity-10 blur-3xl"
+        aria-hidden="true"
+      />
 
-      <div className="relative mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-12 lg:gap-8">
-          {/* Brand Section */}
-          <div className="lg:col-span-4">
-            <Link href="/" className="inline-block">
-              <Image
-                src="/logo.png"
-                alt="The Lazy Mermaid Murals"
-                width={160}
-                height={160}
-                className="h-14 w-auto brightness-0 invert lg:h-16"
-              />
-            </Link>
-            
-            <p className="mt-4 max-w-xs font-body text-sm leading-relaxed text-cream/70">
-              Creating breathtaking murals that transform spaces into works of art. 
-              Let us bring your vision to life with our unique artistic touch.
+      <div className="relative mx-auto max-w-6xl">
+        <div className="grid gap-12 lg:grid-cols-[1.3fr_1fr_1fr] lg:gap-8">
+          {/* Brand column */}
+          <div>
+            <Image
+              src="/logo.png"
+              alt="The Lazy Mermaid Murals"
+              width={140}
+              height={140}
+              className="h-14 w-auto"
+            />
+            <p className="mt-5 max-w-xs text-sm leading-relaxed text-cream/70">
+              Bold, playful murals for homes, businesses and public spaces -
+              based in Tauranga, New Zealand.
             </p>
 
-            <div className="mt-6 flex gap-4">
-              {SOCIAL_ICONS.map((social) => (
-                <motion.a
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={social.label}
-                  whileHover={{ scale: 1.1, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="rounded-full bg-cream/10 p-2.5 text-cream transition-colors duration-300 hover:bg-mango hover:text-ink"
-                >
-                  <social.icon size={18} />
-                </motion.a>
+            <div className="mt-6 flex items-center gap-3">
+              <a
+                href={INSTAGRAM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-cream/10 text-cream transition-colors duration-300 hover:bg-magenta"
+              >
+                <SimpleIconSvg path={siInstagram.path} className="h-5 w-5" />
+              </a>
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="WhatsApp"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-cream/10 text-cream transition-colors duration-300 hover:bg-lagoon"
+              >
+                <SimpleIconSvg path={siWhatsapp.path} className="h-5 w-5" />
+              </a>
+              <a
+                href={`mailto:${EMAIL_ADDRESS}`}
+                aria-label="Email"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-cream/10 text-cream transition-colors duration-300 hover:bg-mango"
+              >
+                <HiOutlineMail size={20} />
+              </a>
+            </div>
+          </div>
+
+          {/* Quick links */}
+          <div>
+            <p className="text-sm font-bold uppercase tracking-wide text-cream/50">
+              Explore
+            </p>
+            <ul className="mt-4 flex flex-col gap-3">
+              {QUICK_LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    onClick={(e) => handleQuickLinkClick(e, link.href)}
+                    className="text-sm font-medium text-cream/80 transition-colors duration-300 hover:text-cream"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
 
-          {/* Quick Links */}
-          <div className="md:col-span-2 lg:col-span-8">
-            <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
-              <div>
-                <h3 className="font-display text-sm font-semibold uppercase tracking-wider text-mango">
-                  Services
-                </h3>
-                <ul className="mt-4 space-y-2.5">
-                  {FOOTER_LINKS.services.map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        href={link.href}
-                        className="font-body text-sm text-cream/70 transition-colors duration-300 hover:text-cream"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="font-display text-sm font-semibold uppercase tracking-wider text-mango">
-                  Company
-                </h3>
-                <ul className="mt-4 space-y-2.5">
-                  {FOOTER_LINKS.company.map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        href={link.href}
-                        className="font-body text-sm text-cream/70 transition-colors duration-300 hover:text-cream"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="font-display text-sm font-semibold uppercase tracking-wider text-mango">
-                  Support
-                </h3>
-                <ul className="mt-4 space-y-2.5">
-                  {FOOTER_LINKS.support.map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        href={link.href}
-                        className="font-body text-sm text-cream/70 transition-colors duration-300 hover:text-cream"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Contact Info Bar */}
-        <div className="mt-12 border-t border-cream/10 pt-8">
-          <div className="flex flex-col flex-wrap items-center justify-between gap-4 md:flex-row">
-            <div className="flex flex-wrap items-center gap-6">
-              <div className="flex items-center gap-2.5">
-                <FaEnvelope className="text-mango/70" size={16} />
-                <a
-                  href="mailto:hello@lazymermaidmurals.com"
-                  className="font-body text-sm text-cream/70 transition-colors duration-300 hover:text-cream"
-                >
-                  hello@lazymermaidmurals.com
-                </a>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <FaPhone className="text-mango/70" size={16} />
-                <a
-                  href="tel:+1234567890"
-                  className="font-body text-sm text-cream/70 transition-colors duration-300 hover:text-cream"
-                >
-                  (555) 123-4567
-                </a>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <FaMapMarkerAlt className="text-mango/70" size={16} />
-                <span className="font-body text-sm text-cream/70">
-                  Austin, TX
-                </span>
-              </div>
-            </div>
-
-            {/* Newsletter */}
-            <form className="flex w-full max-w-xs gap-2">
-              <input
-                type="email"
-                placeholder="Subscribe to our newsletter"
-                className="flex-1 rounded-full bg-cream/10 px-4 py-2 text-sm text-cream placeholder-cream/40 outline-none transition-all duration-300 focus:bg-cream/20 focus:ring-2 focus:ring-mango/50"
-                required
-              />
-              <button
-                type="submit"
-                className="rounded-full bg-mango px-4 py-2 text-sm font-semibold text-ink transition-all duration-300 hover:bg-mango/80 hover:shadow-lg hover:shadow-mango/25"
-              >
-                Subscribe
-              </button>
-            </form>
-          </div>
-        </div>
-
-        {/* Bottom Bar */}
-        <div className="mt-8 border-t border-cream/5 pt-6">
-          <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
-            <p className="font-body text-xs text-cream/50">
-              &copy; {currentYear} The Lazy Mermaid Murals. All rights reserved.
+          {/* Contact + legal */}
+          <div>
+            <p className="text-sm font-bold uppercase tracking-wide text-cream/50">
+              Get in touch
             </p>
-            <div className="flex gap-4">
-              <Link
-                href="/privacy"
-                className="font-body text-xs text-cream/50 transition-colors duration-300 hover:text-cream"
-              >
-                Privacy Policy
-              </Link>
-              <Link
-                href="/terms"
-                className="font-body text-xs text-cream/50 transition-colors duration-300 hover:text-cream"
-              >
-                Terms of Service
-              </Link>
-              <Link
-                href="/cookies"
-                className="font-body text-xs text-cream/50 transition-colors duration-300 hover:text-cream"
-              >
-                Cookie Policy
-              </Link>
-            </div>
+            <a
+              href={`mailto:${EMAIL_ADDRESS}`}
+              className="mt-4 block text-sm font-medium text-cream/80 transition-colors duration-300 hover:text-cream"
+            >
+              {EMAIL_ADDRESS}
+            </a>
+
+            <p className="mt-8 text-sm font-bold uppercase tracking-wide text-cream/50">
+              Legal
+            </p>
+            <ul className="mt-4 flex flex-col gap-3">
+              {LEGAL_LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm font-medium text-cream/80 transition-colors duration-300 hover:text-cream"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
+        </div>
+
+        <div className="mt-14 flex flex-col gap-3 border-t border-cream/10 pt-6 text-xs text-cream/50 lg:flex-row lg:items-center lg:justify-between">
+          <p>© {year} The Lazy Mermaid Murals. All rights reserved.</p>
+          <p>Made with brush and a little chaos in Tauranga, NZ.</p>
         </div>
       </div>
     </footer>
