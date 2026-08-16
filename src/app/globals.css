@@ -1,26 +1,70 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  --color-cream: #FEF6ED;
+  --color-peach: #FFEAD4;
+  --color-mango: #FFB162;
+  --color-lagoon: #5EC1CF;
+  --color-coral: #F09580;
+  --color-magenta: #D93E87;
+  --color-ink: #2B2420;
+  --color-ink-soft: #5C534B;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --font-display: var(--font-fraunces), serif;
+  --font-body: var(--font-jakarta), sans-serif;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --radius-blob: 2rem;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 28s linear infinite;
+}
+
+/* Additional footer-specific styles */
+footer a {
+  transition: color 0.3s ease;
+}
+
+footer input::placeholder {
+  color: rgba(254, 246, 237, 0.4);
+}
+
+/* Smooth hover effect for social icons */
+footer .social-icon {
+  transition: all 0.3s ease;
+}
+
+footer .social-icon:hover {
+  transform: translateY(-2px);
+}
+
+/* Newsletter input focus glow */
+footer input:focus {
+  box-shadow: 0 0 0 3px rgba(255, 177, 98, 0.3);
+}
+
+/* Decorative wave pattern at top of footer (optional) */
+.footer-wave {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 100'%3E%3Cpath fill='%232B2420' fill-opacity='1' d='M0,32L80,42.7C160,53,320,75,480,74.7C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,100L1360,100C1280,100,1120,100,960,100C800,100,640,100,480,100C320,100,160,100,80,100L0,100Z'/%3E%3C/svg%3E") no-repeat top center / 100% 100%;
+  height: 50px;
+  margin-top: -1px;
 }
