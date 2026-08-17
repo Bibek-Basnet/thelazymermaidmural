@@ -13,7 +13,7 @@ const NAV_LINKS = [
   { label: "About", href: "/#about", color: "lagoon" },
   { label: "Services", href: "/#services", color: "magenta" },
   { label: "Process", href: "/#process", color: "coral" },
-  { label: "Gallery", href: "/#gallery", color: "mango" },
+  { label: "Gallery", href: "/portfolio", color: "mango" },
   { label: "Contact", href: "/#contact", color: "lagoon" },
 ];
 
@@ -37,15 +37,6 @@ function scrollToSection(href: string, onDone?: () => void) {
   }
   onDone?.();
   return true;
-}
-
-function scrollToTop(onDone?: () => void) {
-  if (window.lenisInstance) {
-    window.lenisInstance.scrollTo(0, { duration: 1.2 });
-  } else {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-  onDone?.();
 }
 
 function NavLink({
@@ -91,11 +82,6 @@ function MobileDrawer({
   isOpen: boolean;
   onClose: () => void;
 }) {
-  const handleLogoClick = (e: React.MouseEvent<HTMLImageElement>) => {
-    onClose();
-    scrollToTop();
-  };
-
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     onClose();
     const handled = scrollToSection(href);
@@ -123,14 +109,15 @@ function MobileDrawer({
             className="fixed right-0 top-0 z-50 flex h-full w-[78%] max-w-xs flex-col rounded-l-3xl bg-cream shadow-lg lg:hidden"
           >
             <div className="flex items-center justify-between px-6 py-6">
-              <Image
-                src="/logo.png"
-                alt="The Lazy Mermaid Murals"
-                width={110}
-                height={110}
-                className="h-11 w-auto cursor-pointer"
-                onClick={handleLogoClick}
-              />
+              <Link href="/" onClick={onClose}>
+                <Image
+                  src="/logo.png"
+                  alt="The Lazy Mermaid Murals"
+                  width={260}
+                  height={260}
+                  className="h-28 w-auto md:h-32"
+                />
+              </Link>
               <button
                 type="button"
                 onClick={onClose}
@@ -188,12 +175,6 @@ export default function Navbar() {
     };
   }, [isMenuOpen]);
 
-  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    setIsMenuOpen(false);
-    scrollToTop();
-  };
-
   return (
     <>
       <header
@@ -205,14 +186,14 @@ export default function Navbar() {
         )}
       >
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-10">
-          <Link href="/" onClick={handleLogoClick}>
+          <Link href="/">
             <Image
               src="/logo.png"
               alt="The Lazy Mermaid Murals"
-              width={160}
-              height={160}
+              width={260}
+              height={260}
               priority
-              className="h-14 w-auto lg:h-16"
+              className="h-28 w-auto md:h-32 lg:h-16"
             />
           </Link>
 
@@ -243,10 +224,6 @@ export default function Navbar() {
         </nav>
       </header>
 
-      {/* Portaled to document.body so the drawer sits outside the header's
-          backdrop-blur stacking context - nesting a transformed element
-          inside a backdrop-filter ancestor causes WebKit to render the
-          child's background as translucent instead of solid. */}
       {isMounted &&
         createPortal(
           <MobileDrawer isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />,

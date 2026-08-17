@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import SmoothScrollProvider from "@/components/providers/SmoothScrollProvider";
 import Footer from "@/components/layout/Footer";
+import BackToTopButton from "@/components/ui/BackToTopButton";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -69,6 +70,7 @@ export default function RootLayout({
         <Navbar />
         <SmoothScrollProvider>{children}</SmoothScrollProvider>
         <Footer />
+        <BackToTopButton />
       </body>
 
     </html>

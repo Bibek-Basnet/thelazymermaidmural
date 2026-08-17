@@ -1,13 +1,9 @@
 "use client";
 
-import { useRef, useLayoutEffect } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils/cn";
-
-gsap.registerPlugin(ScrollTrigger);
 
 type Project = {
   eyebrow: string;
@@ -16,29 +12,23 @@ type Project = {
   description: string;
   image: string;
   slug: string;
-  // Defaults to "cover". Use "contain" for portrait/vertical photos that
-  // lose too much when cropped to fill this landscape slide.
   fit?: "cover" | "contain";
 };
 
-// Ordered by importance per client brief. Swap `image` paths once final
-// photo filenames are confirmed. Add/remove projects freely - numbering
-// and scroll distance are derived from this array's length, nothing is
-// hardcoded to "6".
 const PROJECTS: Project[] = [
   {
     eyebrow: "Creative Bay of Plenty × Tauranga City Council",
     title: "TV3 Carpark",
     size: "160 sqm",
     description:
-      "A full-height carpark facade turned into the city's biggest piece of public colour.",
+      "A full-height carpark facade turned into the city's biggest piece of public art.",
     image: "/work/work1.jpeg",
     slug: "tv3-carpark",
   },
   {
     eyebrow: "Tauranga City Council",
     title: "Interactive Floor Murals",
-    size: "12–18 sqm each",
+    size: "12-18 sqm each",
     description:
       "Four playable floors - the floor is water, the floor is lava, shell hop, desert hop.",
     image: "/work/work2.jpeg",
@@ -86,139 +76,99 @@ const PROJECTS: Project[] = [
 const ARTIST_STATEMENT =
   "I love creating joyful, vibrant murals that bring personality and life to a space. Each piece is thoughtfully designed and painted with care, with a focus on quality and individuality. Inspired by my love of nature and colour, I enjoy bringing bold, playful elements to homes, businesses and public spaces.";
 
-// Total slide count includes the closing CTA card, so the progress
-// indicator and scroll distance stay correct if PROJECTS changes.
 const SLIDE_COUNT = PROJECTS.length + 1;
+const AUTOPLAY_INTERVAL = 4000;
 
 export default function FeaturedWork() {
-  const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const slideRefs = useRef<HTMLElement[]>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const isPausedRef = useRef(false);
 
-  useLayoutEffect(() => {
-    const section = sectionRef.current;
+  const scrollToIndex = useCallback((index: number) => {
     const track = trackRef.current;
-    if (!section || !track) return;
+    if (!track) return;
+    const slide = track.children[index] as HTMLElement | undefined;
+    if (!slide) return;
+    track.scrollTo({ left: slide.offsetLeft, behavior: "smooth" });
+    setActiveIndex(index);
+  }, []);
 
-    // Measure the section's actual rendered width rather than trusting
-    // 100vw - vw includes the scrollbar gutter in most browsers, which
-    // was quietly desyncing the scroll math over multiple cards.
-    const setSlideWidth = () => {
-      const width = section.getBoundingClientRect().width;
-      section.style.setProperty("--slide-w", `${width}px`);
-    };
-    setSlideWidth();
-
-    const resizeObserver = new ResizeObserver(() => {
-      setSlideWidth();
-      ScrollTrigger.refresh();
-    });
-    resizeObserver.observe(section);
-
-    const mm = gsap.matchMedia();
-
-    mm.add(
-      {
-        isDesktop:
-          "(min-width: 1024px) and (prefers-reduced-motion: no-preference)",
-      },
-      (context) => {
-        const { isDesktop } = context.conditions as { isDesktop: boolean };
-
-        if (isDesktop) {
-          const distance = () => track.scrollWidth - section.clientWidth;
-
-          const tween = gsap.to(track, {
-            x: () => -distance(),
-            ease: "none",
-            scrollTrigger: {
-              trigger: section,
-              start: "top top",
-              end: () => `+=${distance()}`,
-              scrub: 1,
-              pin: true,
-              // Lenis applies a transform to its wrapper for smooth
-              // scroll, which breaks ScrollTrigger's default `fixed`
-              // pin. Force transform-based pinning so it tracks
-              // correctly inside that wrapper.
-              pinType: "transform",
-              anticipatePin: 1,
-              invalidateOnRefresh: true,
-            },
-          });
-
-          // Fonts/images loading after mount can shift layout height;
-          // refresh once everything's settled so pin distance is exact.
-          const raf = requestAnimationFrame(() => ScrollTrigger.refresh());
-
-          return () => {
-            cancelAnimationFrame(raf);
-            tween.scrollTrigger?.kill();
-            tween.kill();
-          };
+  // Autoplay: advances every 4s, loops back to slide 0 after the last one.
+  // Pauses on hover (desktop) and while the person is actively touching
+  // the track (mobile), resumes automatically once they let go.
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      if (isPausedRef.current) return;
+      setActiveIndex((prev) => {
+        const next = (prev + 1) % SLIDE_COUNT;
+        const track = trackRef.current;
+        const slide = track?.children[next] as HTMLElement | undefined;
+        if (track && slide) {
+          track.scrollTo({ left: slide.offsetLeft, behavior: "smooth" });
         }
+        return next;
+      });
+    }, AUTOPLAY_INTERVAL);
 
-        // Compact / reduced-motion: native horizontal scroll-snap,
-        // auto-advancing until the person touches it themselves.
-        gsap.set(track, { x: 0 });
+    return () => window.clearInterval(intervalId);
+  }, []);
 
-        let index = 0;
-        let stopped = false;
+  // Keep `activeIndex` in sync if the person manually swipes/drags the
+  // track themselves, so the dots stay accurate either way.
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
 
-        const goToNext = () => {
-          if (stopped) return;
-          index = (index + 1) % SLIDE_COUNT;
-          track.scrollTo({
-            left: index * section.clientWidth,
-            behavior: "smooth",
-          });
-        };
+    const handleScroll = () => {
+      let closestIndex = 0;
+      let closestDistance = Infinity;
+      Array.from(track.children).forEach((child, index) => {
+        const el = child as HTMLElement;
+        const distance = Math.abs(el.offsetLeft - track.scrollLeft);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      });
+      setActiveIndex(closestIndex);
+    };
 
-        const intervalId = window.setInterval(goToNext, 4000);
+    const handlePauseStart = () => {
+      isPausedRef.current = true;
+    };
+    const handlePauseEnd = () => {
+      isPausedRef.current = false;
+    };
 
-        const stopAutoplay = () => {
-          if (stopped) return;
-          stopped = true;
-          window.clearInterval(intervalId);
-        };
-
-        // Any real user interaction (not the programmatic auto-scroll)
-        // stops it for good, rather than fighting the person's own swipe.
-        track.addEventListener("touchstart", stopAutoplay, { passive: true });
-        track.addEventListener("wheel", stopAutoplay, { passive: true });
-        track.addEventListener("pointerdown", stopAutoplay);
-
-        return () => {
-          window.clearInterval(intervalId);
-          track.removeEventListener("touchstart", stopAutoplay);
-          track.removeEventListener("wheel", stopAutoplay);
-          track.removeEventListener("pointerdown", stopAutoplay);
-        };
-      }
-    );
+    track.addEventListener("scroll", handleScroll, { passive: true });
+    track.addEventListener("touchstart", handlePauseStart, { passive: true });
+    track.addEventListener("touchend", handlePauseEnd, { passive: true });
+    track.addEventListener("mouseenter", handlePauseStart);
+    track.addEventListener("mouseleave", handlePauseEnd);
 
     return () => {
-      resizeObserver.disconnect();
-      mm.revert();
+      track.removeEventListener("scroll", handleScroll);
+      track.removeEventListener("touchstart", handlePauseStart);
+      track.removeEventListener("touchend", handlePauseEnd);
+      track.removeEventListener("mouseenter", handlePauseStart);
+      track.removeEventListener("mouseleave", handlePauseEnd);
     };
   }, []);
 
   return (
     <section
-  ref={sectionRef}
-  id="work"
-  aria-label="Featured work"
-  className="relative flex flex-col overflow-hidden bg-[var(--color-peach)] lg:h-screen"
->
-      {/* Static header band - sits above the image, not on top of it */}
-      <div className="relative z-10 shrink-0 p-6 lg:p-16 lg:pb-8">
-        <p className="font-[var(--font-jakarta)] text-sm font-bold uppercase tracking-wide text-[var(--color-magenta)]">
+      id="work"
+      aria-label="Featured work"
+      className="relative flex flex-col overflow-hidden bg-peach py-16 lg:py-20"
+    >
+      <div className="relative z-10 shrink-0 px-6 pb-8 lg:px-16">
+        <p className="font-(--font-jakarta) text-sm font-bold uppercase tracking-wide text-magenta">
           Featured work
         </p>
-        <h2 className="mt-3 font-[var(--font-fraunces)] text-4xl font-bold text-[var(--color-ink)] lg:mt-4 lg:text-5xl">
-          Work worth{" "}
-          <span className="relative inline-block text-[var(--color-coral)]">
-            walking
+        <h2 className="mt-3 font-(--font-fraunces) text-4xl font-bold text-ink lg:mt-4 lg:text-5xl">
+          Walls worth{" "}
+          <span className="relative inline-block text-coral">
+            stopping
             <svg
               className="absolute -bottom-2 left-0 h-2 w-full lg:h-3"
               viewBox="0 0 200 12"
@@ -234,45 +184,24 @@ export default function FeaturedWork() {
               />
             </svg>
           </span>{" "}
-          through
+          for
         </h2>
       </div>
-
-      {/* Hand-drawn curved guide line the cards ride along */}
-      <svg
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-[70%] w-full opacity-40"
-        viewBox="0 0 1600 800"
-        preserveAspectRatio="none"
-        aria-hidden="true"
-      >
-        <path
-          d="M -50 500 C 250 300, 450 700, 750 450 S 1150 250, 1450 500 S 1750 650, 1900 400"
-          fill="none"
-          stroke="var(--color-coral)"
-          strokeWidth="3"
-          strokeLinecap="round"
-          strokeDasharray="2 14"
-        />
-      </svg>
 
       <div
         ref={trackRef}
         className={cn(
-          "relative flex h-[70svh] lg:h-auto lg:flex-1",
-          "overflow-x-auto lg:overflow-visible",
-          "snap-x snap-mandatory lg:snap-none",
-          "[scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          "relative flex h-[70svh] lg:h-[75vh]",
+          "overflow-x-auto",
+          "snap-x snap-mandatory",
+          "scrollbar-none scroll-smooth"
         )}
       >
         {PROJECTS.map((project, i) => (
           <a
             key={project.slug}
-            ref={(el) => {
-              if (el) slideRefs.current[i] = el;
-            }}
             href={`/portfolio/${project.slug}`}
-            style={{ width: "var(--slide-w, 100vw)" }}
-            className="group relative h-full shrink-0 snap-center overflow-hidden bg-[var(--color-ink)]"
+            className="group relative h-full w-full shrink-0 snap-center overflow-hidden bg-ink lg:w-[85vw] xl:w-[70vw]"
           >
             <Image
               src={project.image}
@@ -285,63 +214,73 @@ export default function FeaturedWork() {
                 project.fit === "contain" ? "object-contain" : "object-cover"
               )}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-ink)]/85 via-[var(--color-ink)]/10 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/10 to-transparent" />
 
-            <span className="absolute right-6 top-6 font-[var(--font-fraunces)] text-sm font-bold text-[var(--color-cream)]/70 lg:right-16 lg:top-10">
+            <span className="absolute right-6 top-6 font-(--font-fraunces) text-sm font-bold text-cream/70 lg:right-16 lg:top-10">
               {String(i + 1).padStart(2, "0")}
             </span>
 
             <div className="absolute inset-x-0 bottom-0 p-6 lg:p-10">
-              <p className="font-[var(--font-jakarta)] text-xs font-bold uppercase tracking-wide text-[var(--color-mango)]">
+              <p className="font-(--font-jakarta) text-xs font-bold uppercase tracking-wide text-mango">
                 {project.eyebrow}
               </p>
-              <h3 className="mt-2 font-[var(--font-fraunces)] text-3xl font-bold text-[var(--color-cream)] lg:text-4xl">
+              <h3 className="mt-2 font-(--font-fraunces) text-3xl font-bold text-cream lg:text-4xl">
                 {project.title}
               </h3>
-              <p className="mt-3 line-clamp-2 max-w-lg font-[var(--font-jakarta)] text-base text-[var(--color-cream)]/85">
+              <p className="mt-3 line-clamp-2 max-w-lg font-(--font-jakarta) text-base text-cream/85">
                 {project.description}
               </p>
-              <p className="mt-3 font-[var(--font-jakarta)] text-xs font-semibold text-[var(--color-lagoon)]">
+              <p className="mt-3 font-(--font-jakarta) text-xs font-semibold text-lagoon">
                 {project.size}
               </p>
             </div>
           </a>
         ))}
 
-        {/* Closing CTA slide */}
-        <div
-          className={cn(
-            "relative flex h-full shrink-0 snap-center flex-col justify-between overflow-hidden bg-[var(--color-magenta)] p-8",
-            "w-[var(--slide-w,100vw)] lg:w-[440px] lg:p-12"
-          )}
-        >
+        <div className="relative flex h-full w-full shrink-0 snap-center flex-col justify-between overflow-hidden bg-magenta p-8 lg:w-[440px] lg:p-12">
           <div
-            className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-[var(--color-coral)] opacity-30"
+            className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-coral opacity-30"
             aria-hidden="true"
           />
           <div
-            className="pointer-events-none absolute -bottom-14 left-6 h-32 w-32 rounded-full bg-[var(--color-mango)] opacity-30"
+            className="pointer-events-none absolute -bottom-14 left-6 h-32 w-32 rounded-full bg-mango opacity-30"
             aria-hidden="true"
           />
 
-          <span className="relative font-[var(--font-fraunces)] text-sm font-bold text-[var(--color-cream)]/70">
+          <span className="relative font-(--font-fraunces) text-sm font-bold text-cream/70">
             {String(SLIDE_COUNT).padStart(2, "0")}
           </span>
 
           <div className="relative">
-            <p className="font-[var(--font-fraunces)] text-2xl leading-snug text-[var(--color-cream)]">
+            <p className="font-(--font-fraunces) text-2xl leading-snug text-cream">
               {ARTIST_STATEMENT}
             </p>
 
             <Link
               href="/portfolio"
-              className="mt-6 inline-flex w-fit items-center gap-2 rounded-[var(--radius-blob)] bg-[var(--color-cream)] px-6 py-3 font-[var(--font-jakarta)] text-sm font-bold text-[var(--color-ink)] transition-transform duration-300 hover:scale-105"
+              className="mt-6 inline-flex w-fit items-center gap-2 rounded-(--radius-blob) bg-cream px-6 py-3 font-(--font-jakarta) text-sm font-bold text-ink transition-transform duration-300 hover:scale-105"
             >
               View all work
               <span aria-hidden="true">→</span>
             </Link>
           </div>
         </div>
+      </div>
+
+      {/* Dot indicators - always visible, every screen size */}
+      <div className="relative z-10 flex items-center justify-center gap-2 pt-6">
+        {Array.from({ length: SLIDE_COUNT }).map((_, index) => (
+          <button
+            key={index}
+            type="button"
+            onClick={() => scrollToIndex(index)}
+            aria-label={`Go to slide ${index + 1}`}
+            className={cn(
+              "h-2 rounded-full transition-all duration-300",
+              activeIndex === index ? "w-6 bg-magenta" : "w-2 bg-ink/20"
+            )}
+          />
+        ))}
       </div>
     </section>
   );

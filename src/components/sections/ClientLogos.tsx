@@ -16,19 +16,17 @@ const CLIENTS: ClientLogo[] = [
   { name: "Koru", src: "/logos/logo6.png" },
 ];
 
-
-
 export default function ClientLogos() {
   const loop = [...CLIENTS, ...CLIENTS];
 
   return (
-    <section className="w-full overflow-hidden bg-cream py-16 sm:py-20 lg:py-24">
-      <p className="mb-8 text-center font-body text-sm font-bold uppercase tracking-widest text-ink-soft sm:mb-10 sm:text-base">
+    <section className="w-full overflow-hidden bg-[#E1F5EE] py-10 sm:py-12 lg:py-14">
+      <p className="mb-6 text-center font-body text-sm font-bold uppercase tracking-widest text-ink-soft sm:mb-8 sm:text-base">
         Trusted by
       </p>
 
       <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
-       <div className="animate-marquee flex w-max items-center gap-10 sm:gap-14 lg:gap-16">
+        <div className="animate-marquee flex w-max items-center gap-6 sm:gap-8 lg:gap-10">
           {loop.map((client, i) => (
             <div
               key={`${client.name}-${i}`}

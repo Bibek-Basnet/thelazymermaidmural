@@ -3,7 +3,27 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { siInstagram, siWhatsapp } from "simple-icons";
+import { HiOutlineMail } from "react-icons/hi";
 import { gsap, registerGsap } from "@/lib/gsap/registerGsap";
+
+const INSTAGRAM_URL = "https://instagram.com/thelazymermaidmurals";
+const WHATSAPP_URL = "https://wa.me/64000000000"; // replace with real number
+const EMAIL_ADDRESS = "hello@thelazymermaid.nz";
+
+function SimpleIconSvg({
+  path,
+  className,
+}: {
+  path: string;
+  className?: string;
+}) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d={path} />
+    </svg>
+  );
+}
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -60,7 +80,7 @@ export default function Hero() {
           Bringing{" "}
           <span className="text-mango">colour</span>,{" "}
           <span className="text-coral">creativity</span> and{" "}
-          <span className="text-lagoon">community</span> to{" "}
+          <span className="text-lagoon">communities</span> to{" "}
           <span className="relative inline-block">
             life
             <svg
@@ -92,6 +112,34 @@ export default function Hero() {
           >
             My Services
           </Link>
+        </div>
+
+        <div className="mt-6 flex items-center justify-center gap-3 sm:mt-8">
+          <a
+            href={INSTAGRAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-cream/15 text-cream transition-colors duration-300 hover:bg-magenta"
+          >
+            <SimpleIconSvg path={siInstagram.path} className="h-4 w-4" />
+          </a>
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="WhatsApp"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-cream/15 text-cream transition-colors duration-300 hover:bg-lagoon"
+          >
+            <SimpleIconSvg path={siWhatsapp.path} className="h-4 w-4" />
+          </a>
+          <a
+            href={`mailto:${EMAIL_ADDRESS}`}
+            aria-label="Email"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-cream/15 text-cream transition-colors duration-300 hover:bg-mango"
+          >
+            <HiOutlineMail size={18} />
+          </a>
         </div>
       </div>
     </section>

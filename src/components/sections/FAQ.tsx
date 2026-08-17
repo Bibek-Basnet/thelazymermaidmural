@@ -13,7 +13,7 @@ const FAQ_ITEMS: FAQItem[] = [
   {
     question: "How much does a mural cost?",
     answer:
-      "It depends on the size, surface and complexity of the design. After a chat about your space and vision, I'll put together a personalised quote - most residential murals sit within a 600–3000 NZD range, but public and commercial work varies more.",
+      "It depends on the size, surface and complexity of the design. My rate is $150 NZD per square metre - after a chat about your space and vision, I'll put together a personalised quote based on that. Most residential murals sit within a 600–3000 NZD range, but public and commercial work varies more.",
     color: "#D93E87",
   },
   {
@@ -37,7 +37,7 @@ const FAQ_ITEMS: FAQItem[] = [
   {
     question: "Can I see what the design will look like before you paint?",
     answer:
-      "Always. I'll create your custom design and digitally place it onto photos of your actual space, so you can get a proper feel for the finished mural before a drop of paint goes down. We refine it together until it's right.",
+      "Always. I'll create your custom design and digitally superimpose it onto photos of your actual space, so you can get a proper feel for the finished mural before a drop of paint goes down. I also have a VR headset, so you can physically see and walk around the mural in the space before we start. We refine it together until it's right.",
     color: "#D93E87",
   },
   {

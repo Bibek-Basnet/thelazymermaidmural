@@ -196,7 +196,7 @@ export default function Services() {
             Services
           </p>
           <h2 className="mt-2 font-[var(--font-fraunces)] text-4xl font-bold text-magenta lg:text-5xl">
-            Pick your paint
+            Pick a Project
           </h2>
           <svg
             width="110"
