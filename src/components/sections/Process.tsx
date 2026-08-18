@@ -255,7 +255,6 @@ export default function Process() {
             />
           </svg>
 
-          {/* Mobile: left-aligned line, threads through the splash column */}
           <svg
             width="4"
             height="100%"

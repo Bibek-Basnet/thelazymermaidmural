@@ -31,10 +31,7 @@ export default function About() {
           </h2>
         </motion.div>
 
-        {/* items-stretch makes both columns match the taller one's height,
-            so the photo fills exactly as much vertical space as the text
-            block ends up needing - no fixed aspect ratio to fall out of
-            sync with copy length. */}
+       
         <div className="mt-14 grid items-stretch gap-12 lg:grid-cols-12 lg:gap-16">
           <motion.div
             initial="hidden"
@@ -89,7 +86,7 @@ export default function About() {
               </p>
               <p>
                 From walls and floors to coffee trailers, shipping
-                containers and buses — if it can be painted, I&rsquo;ll
+                containers and buses - if it can be painted, I&rsquo;ll
                 probably want to paint it!
               </p>
             </motion.div>

@@ -7,9 +7,9 @@ import { siInstagram, siWhatsapp } from "simple-icons";
 import { HiOutlineMail } from "react-icons/hi";
 import { gsap, registerGsap } from "@/lib/gsap/registerGsap";
 
-const INSTAGRAM_URL = "https://instagram.com/thelazymermaidmurals";
-const WHATSAPP_URL = "https://wa.me/64000000000"; // replace with real number
-const EMAIL_ADDRESS = "hello@thelazymermaid.nz";
+const INSTAGRAM_URL = "https://www.instagram.com/the_lazymermaid_murals/";
+const WHATSAPP_URL = "https://wa.me/642902093896";
+const EMAIL_ADDRESS = "Sarah.thelazymermaid@gmail.com";
 
 function SimpleIconSvg({
   path,

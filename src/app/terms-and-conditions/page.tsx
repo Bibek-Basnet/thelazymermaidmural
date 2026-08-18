@@ -143,7 +143,7 @@ export default function TermsPage() {
         <h2>12. Contact us</h2>
         <p>
           Questions about these Terms can be sent to{" "}
-          <a href="mailto:hello@thelazymermaid.nz">hello@thelazymermaid.nz</a>.
+          <a href="mailto:Sarah.thelazymermaid@gmail.com">Sarah.thelazymermaid@gmail.com</a>.
         </p>
       </section>
     </LegalPageLayout>

@@ -15,61 +15,62 @@ type Project = {
   fit?: "cover" | "contain";
 };
 
+// Slugs here must match src/lib/data/projects.ts exactly - each card
+// links to that project's detail page and gallery.
 const PROJECTS: Project[] = [
   {
     eyebrow: "Creative Bay of Plenty × Tauranga City Council",
-    title: "TV3 Carpark",
+    title: "TV3 Carpark Mural",
     size: "160 sqm",
     description:
-      "A full-height carpark facade turned into the city's biggest piece of public art.",
-    image: "/work/work1.jpeg",
+      "A full-height carpark facade turned into one of the city's biggest pieces of public colour.",
+    image: "/portfolio/project1.jpeg",
     slug: "tv3-carpark",
   },
   {
     eyebrow: "Tauranga City Council",
-    title: "Interactive Floor Murals",
-    size: "12-18 sqm each",
+    title: "'Shell Hop' Interactive Floor Mural",
+    size: "12–18 sqm",
     description:
-      "Four playable floors - the floor is water, the floor is lava, shell hop, desert hop.",
-    image: "/work/work2.jpeg",
-    slug: "interactive-floor-murals",
+      "A playable floor mural inviting people to hop across a trail of native shells.",
+    image: "/portfolio/project2.jpeg",
+    slug: "shell-hop-floor-mural",
+  },
+  {
+    eyebrow: "The Feel Good Art Club",
+    title: "The Feel Good Art Club Studio",
+    size: "15 sqm",
+    description:
+      "A full studio mural built alongside brand identity work, made to work as one piece.",
+    image: "/portfolio/project6.jpeg",
+    slug: "feel-good-art-club-studio",
   },
   {
     eyebrow: "Welcome Bay Community Centre",
-    title: "Therapy Room Mural",
+    title: "'Therapy Room' Mural",
     size: "15 sqm",
     description:
-      "A calming room repainted alongside local youth, start to finish.",
-    image: "/work/work3.jpeg",
+      "A calming, sensory-friendly mural painted alongside local youth, start to finish.",
+    image: "/portfolio/project3.jpeg",
     slug: "welcome-bay-therapy-room",
   },
   {
     eyebrow: "Tauranga City Council",
-    title: "Carpark Scavenger Hunt",
-    size: "84 animals, 2 buildings",
+    title: "Te Manawa ō Pāpāmoa School Mural",
+    size: "School artwork",
     description:
-      "Native NZ wildlife hidden through lift foyers, pillars and stairwells.",
-    image: "/work/work4.jpeg",
-    slug: "carpark-scavenger-hunt",
-  },
-  {
-    eyebrow: "The Feel Good Art Club",
-    title: "Mural & Brand Identity",
-    size: "15 sqm",
-    description:
-      "Wall art built alongside a brand mark, made to work as one piece.",
-    image: "/work/work5.jpeg",
-    slug: "feel-good-art-club",
+      "A school mural translating Te Manawa ō Pāpāmoa's values and identity into visual form.",
+    image: "/portfolio/project9.jpeg",
+    slug: "te-manawa-o-papamoa-school",
   },
   {
     eyebrow: "Tauranga City Council",
-    title: "Primary School Container",
-    size: "14 sqm",
+    title: "Interactive Floor Mural Series",
+    size: "Tauranga City Centre",
     description:
-      "A shipping-container veggie garden, painted to match what grows inside it.",
-    image: "/work/work6.jpeg",
-    slug: "school-shipping-container",
-    fit: "contain",
+      "A three-part series of playable floor murals, each with its own concept and colour story.",
+    image: "/portfolio/project5.jpeg",
+    slug: "city-centre-floor-mural-series",
   },
 ];
 
@@ -77,12 +78,14 @@ const ARTIST_STATEMENT =
   "I love creating joyful, vibrant murals that bring personality and life to a space. Each piece is thoughtfully designed and painted with care, with a focus on quality and individuality. Inspired by my love of nature and colour, I enjoy bringing bold, playful elements to homes, businesses and public spaces.";
 
 const SLIDE_COUNT = PROJECTS.length + 1;
-const AUTOPLAY_INTERVAL = 4000;
+const AUTOPLAY_INTERVAL = 5500;
 
 export default function FeaturedWork() {
+  const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const isPausedRef = useRef(false);
+  const isInViewRef = useRef(false);
 
   const scrollToIndex = useCallback((index: number) => {
     const track = trackRef.current;
@@ -93,12 +96,31 @@ export default function FeaturedWork() {
     setActiveIndex(index);
   }, []);
 
-  // Autoplay: advances every 4s, loops back to slide 0 after the last one.
-  // Pauses on hover (desktop) and while the person is actively touching
-  // the track (mobile), resumes automatically once they let go.
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isInViewRef.current = entry.isIntersecting;
+        if (entry.isIntersecting) {
+          const track = trackRef.current;
+          if (track) {
+            track.scrollTo({ left: 0, behavior: "auto" });
+          }
+          setActiveIndex(0);
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
   useEffect(() => {
     const intervalId = window.setInterval(() => {
-      if (isPausedRef.current) return;
+      if (isPausedRef.current || !isInViewRef.current) return;
       setActiveIndex((prev) => {
         const next = (prev + 1) % SLIDE_COUNT;
         const track = trackRef.current;
@@ -113,8 +135,6 @@ export default function FeaturedWork() {
     return () => window.clearInterval(intervalId);
   }, []);
 
-  // Keep `activeIndex` in sync if the person manually swipes/drags the
-  // track themselves, so the dots stay accurate either way.
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
@@ -158,6 +178,7 @@ export default function FeaturedWork() {
   return (
     <section
       id="work"
+      ref={sectionRef}
       aria-label="Featured work"
       className="relative flex flex-col overflow-hidden bg-peach py-16 lg:py-20"
     >
@@ -267,7 +288,6 @@ export default function FeaturedWork() {
         </div>
       </div>
 
-      {/* Dot indicators - always visible, every screen size */}
       <div className="relative z-10 flex items-center justify-center gap-2 pt-6">
         {Array.from({ length: SLIDE_COUNT }).map((_, index) => (
           <button

@@ -14,7 +14,7 @@ type Service = {
   title: string;
   description: string;
   image: string;
-  squiggleColor: string; // hex, matches brand palette
+  squiggleColor: string; 
 };
 
 const SERVICES: Service[] = [
@@ -23,28 +23,28 @@ const SERVICES: Service[] = [
     title: "Public art",
     description: "Large-scale council and community commissions.",
     image: "/services/mural1.jpeg",
-    squiggleColor: "#FFB162", // mango
+    squiggleColor: "#FFB162", 
   },
   {
     slug: "commercial-murals",
     title: "Commercial murals",
     description: "Bold branded artwork for shops, cafes, and businesses.",
     image: "/services/mural4.jpeg",
-    squiggleColor: "#D93E87", // magenta
+    squiggleColor: "#D93E87", 
   },
   {
     slug: "community-projects",
     title: "Community projects",
     description: "Created together with local youth and residents.",
     image: "/services/mural5.jpeg",
-    squiggleColor: "#5EC1CF", // lagoon
+    squiggleColor: "#5EC1CF", 
   },
   {
     slug: "school-artwork",
     title: "School artwork",
     description: "Playful, colourful pieces made for young minds.",
     image: "/services/mural3.jpeg",
-    squiggleColor: "#F09580", // coral
+    squiggleColor: "#F09580", 
   },
   {
     slug: "interactive-artwork",
@@ -93,8 +93,6 @@ function ServiceTile({ service }: { service: Service }) {
       strokeDashoffset: length,
     });
 
-    // Draw in once the tile enters the viewport - works identically on
-    // mobile (no hover) and desktop (first reveal), independent of hover.
     const trigger = ScrollTrigger.create({
       trigger: tile,
       start: "top 85%",
@@ -111,8 +109,7 @@ function ServiceTile({ service }: { service: Service }) {
     return () => trigger.kill();
   }, []);
 
-  // Desktop-only hover redraw. Guarded by a pointer:fine + hover media
-  // query so touch devices never rely on a hover state that doesn't exist.
+  
   const handleHoverStart = () => {
     const path = squiggleRef.current;
     if (!path || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;

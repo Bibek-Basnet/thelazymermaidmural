@@ -10,7 +10,7 @@ const QUICK_LINKS = [
   { label: "About", href: "/#about" },
   { label: "Services", href: "/#services" },
   { label: "Process", href: "/#process" },
-  { label: "Gallery", href: "/#gallery" },
+  { label: "Gallery", href: "/portfolio" },
   { label: "Contact", href: "/#contact" },
 ];
 
@@ -20,9 +20,9 @@ const LEGAL_LINKS = [
   { label: "Refund & Cancellation", href: "/refund-and-cancellation" },
 ];
 
-const INSTAGRAM_URL = "https://instagram.com/thelazymermaidmurals";
-const WHATSAPP_URL = "https://wa.me/64000000000"; // replace with real number
-const EMAIL_ADDRESS = "hello@thelazymermaid.nz";
+const INSTAGRAM_URL = "https://www.instagram.com/the_lazymermaid_murals/";
+const WHATSAPP_URL = "https://wa.me/642902093896"; 
+const EMAIL_ADDRESS = "Sarah.thelazymermaid@gmail.com";
 
 function scrollToSection(href: string) {
   if (!href.includes("#")) return false;
@@ -62,7 +62,7 @@ export default function Footer() {
 
   return (
     <footer className="relative overflow-hidden bg-ink px-6 pb-8 pt-16 lg:px-16 lg:pt-24">
-      {/* Soft brand-color glow, mirrors the blob motif used in Hero/About */}
+     
       <div
         className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-magenta opacity-10 blur-3xl"
         aria-hidden="true"
@@ -74,7 +74,7 @@ export default function Footer() {
 
       <div className="relative mx-auto max-w-6xl">
         <div className="grid gap-12 lg:grid-cols-[1.3fr_1fr_1fr] lg:gap-8">
-          {/* Brand column */}
+         
           <div>
             <Image
               src="/logo.png"
@@ -117,7 +117,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Quick links */}
+          
           <div>
             <p className="text-sm font-bold uppercase tracking-wide text-cream/50">
               Explore
@@ -137,7 +137,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Contact + legal */}
+          
           <div>
             <p className="text-sm font-bold uppercase tracking-wide text-cream/50">
               Get in touch

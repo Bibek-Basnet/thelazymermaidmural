@@ -14,8 +14,6 @@ export type Project = {
   size?: string;
   description: string;
   coverImage: string;
-  // Most projects: a flat gallery. Multi-concept projects (like the
-  // 2025 floor mural series) use `concepts` instead of `images`.
   images?: string[];
   concepts?: ProjectConcept[];
   featured: boolean;

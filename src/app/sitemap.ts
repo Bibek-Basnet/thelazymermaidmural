@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
+import { PROJECTS } from "@/lib/data/projects";
 
-const siteUrl = "https://www.thelazymermaid.nz";
+const siteUrl = "https://www.thelazymermaidmurals.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
+  const staticPages: MetadataRoute.Sitemap = [
     {
       url: siteUrl,
       lastModified: new Date(),
@@ -11,28 +12,37 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: `${siteUrl}/#portfolio`,
+      url: `${siteUrl}/portfolio`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.9,
     },
     {
-      url: `${siteUrl}/#services`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${siteUrl}/#about`,
+      url: `${siteUrl}/privacy-policy`,
       lastModified: new Date(),
       changeFrequency: "yearly",
-      priority: 0.7,
+      priority: 0.3,
     },
     {
-      url: `${siteUrl}/#contact`,
+      url: `${siteUrl}/terms-and-conditions`,
       lastModified: new Date(),
       changeFrequency: "yearly",
-      priority: 0.7,
+      priority: 0.3,
+    },
+    {
+      url: `${siteUrl}/refund-and-cancellation`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.3,
     },
   ];
+
+  const projectPages: MetadataRoute.Sitemap = PROJECTS.map((project) => ({
+    url: `${siteUrl}/portfolio/${project.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
+  return [...staticPages, ...projectPages];
 }

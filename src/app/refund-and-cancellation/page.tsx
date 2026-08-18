@@ -113,7 +113,7 @@ export default function RefundCancellationPage() {
         <p>
           If you need to discuss a cancellation, rescheduling, or refund, please contact us as
           early as possible at{" "}
-          <a href="mailto:hello@thelazymermaid.nz">hello@thelazymermaid.nz</a> so we can find the
+          <a href="mailto:Sarah.thelazymermaid@gmail.com">Sarah.thelazymermaid@gmail.com</a> so we can find the
           best solution together.
         </p>
       </section>

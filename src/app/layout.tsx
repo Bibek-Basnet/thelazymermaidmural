@@ -21,7 +21,7 @@ const jakarta = Plus_Jakarta_Sans({
   display: "swap",
 });
 
-const siteUrl = "https://www.thelazymermaid.nz";
+const siteUrl = "https://www.thelazymermaidmurals.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -46,17 +46,53 @@ export const metadata: Metadata = {
     title: "The Lazy Mermaid Murals | Sarah Cornish, Mural Artist in Tauranga",
     description:
       "Bold, professional mural art for businesses, councils, and public spaces in Tauranga and beyond.",
+    images: [
+      {
+        url: "/logo.png",
+        width: 512,
+        height: 512,
+        alt: "The Lazy Mermaid Murals",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "The Lazy Mermaid Murals | Sarah Cornish, Mural Artist in Tauranga",
     description:
       "Bold, professional mural art for businesses, councils, and public spaces in Tauranga and beyond.",
+    images: ["/logo.png"],
   },
   robots: {
     index: true,
     follow: true,
   },
+};
+
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "@id": `${siteUrl}/#business`,
+  name: "The Lazy Mermaid Murals",
+  image: `${siteUrl}/logo.png`,
+  url: siteUrl,
+  email: "Sarah.thelazymermaid@gmail.com",
+  telephone: "+64290209386",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Tauranga",
+    addressRegion: "Bay of Plenty",
+    addressCountry: "NZ",
+  },
+  areaServed: {
+    "@type": "City",
+    name: "Tauranga",
+  },
+  founder: {
+    "@type": "Person",
+    name: "Sarah Cornish",
+  },
+  sameAs: ["https://www.instagram.com/the_lazymermaid_murals/"],
+  priceRange: "$$",
 };
 
 export default function RootLayout({
@@ -67,12 +103,15 @@ export default function RootLayout({
   return (
     <html lang="en-NZ" className={`${fraunces.variable} ${jakarta.variable}`}>
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+        />
         <Navbar />
         <SmoothScrollProvider>{children}</SmoothScrollProvider>
         <Footer />
         <BackToTopButton />
       </body>
-
     </html>
   );
 }

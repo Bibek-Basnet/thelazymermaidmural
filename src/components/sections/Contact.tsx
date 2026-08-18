@@ -57,23 +57,78 @@ function ContactForm() {
   }, [searchParams, setValue]);
 
   const onSubmit = async (data: ContactFormValues) => {
-    // Wire to your API route / email service here.
     await new Promise((resolve) => setTimeout(resolve, 800));
     console.log(data);
   };
 
   if (isSubmitSuccessful) {
     return (
-      <div className="flex h-full min-h-[400px] flex-col items-center justify-center rounded-2xl bg-white p-8 text-center">
-        <i className="ti ti-circle-check text-4xl text-lagoon" aria-hidden="true" />
-        <p className="mt-4 font-[var(--font-fraunces)] text-xl font-bold text-ink">
-          Message sent
-        </p>
-        <p className="mt-2 max-w-xs text-sm text-ink-soft">
-          Thanks for reaching out - Sarah will be in touch soon to arrange a free
-          consultation.
-        </p>
-      </div>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.92 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+        className="relative flex h-full min-h-[400px] flex-col items-center justify-center overflow-hidden rounded-2xl bg-white p-8 text-center"
+      >
+        <motion.div
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 0.25 }}
+          transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+          className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-coral"
+          aria-hidden="true"
+        />
+        <motion.div
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 0.25 }}
+          transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+          className="pointer-events-none absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-mango"
+          aria-hidden="true"
+        />
+        <motion.div
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 0.2 }}
+          transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+          className="pointer-events-none absolute right-8 bottom-4 h-16 w-16 rounded-full bg-lagoon"
+          aria-hidden="true"
+        />
+
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.15, ease: "backOut" }}
+          className="relative flex h-16 w-16 items-center justify-center rounded-full bg-lagoon"
+        >
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <motion.path
+              d="M6 14.5L11.5 20L22 8"
+              stroke="white"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 0.4, delay: 0.5, ease: "easeOut" }}
+            />
+          </svg>
+        </motion.div>
+
+        <motion.p
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.4 }}
+          className="relative mt-5 font-(--font-fraunces) text-xl font-bold text-ink"
+        >
+          Message sent!
+        </motion.p>
+        <motion.p
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.5 }}
+          className="relative mt-2 max-w-xs text-sm text-ink-soft"
+        >
+          Thanks for reaching out - Sarah will be in touch soon to arrange a
+          free consultation.
+        </motion.p>
+      </motion.div>
     );
   }
 
@@ -151,7 +206,10 @@ function ContactForm() {
 
         <div className="sm:col-span-1">
           <label htmlFor="wallSize" className="mb-1.5 block text-sm font-bold text-ink">
-            Wall size <span className="font-normal text-ink-soft">(optional)</span>
+            Wall size{" "}
+            <span className="font-normal text-ink-soft">
+              (I can measure on-site)
+            </span>
           </label>
           <input
             id="wallSize"
@@ -195,10 +253,15 @@ function ContactForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-magenta px-6 py-3.5 text-sm font-bold text-cream transition-transform duration-300 hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+        className="group mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-magenta px-6 py-3.5 text-sm font-bold text-cream transition-transform duration-300 hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
       >
         {isSubmitting ? "Sending..." : "Send message"}
-        {!isSubmitting && <i className="ti ti-arrow-right text-base" aria-hidden="true" />}
+        {!isSubmitting && (
+          <i
+            className="ti ti-arrow-right text-base transition-transform duration-300 group-hover:translate-x-1"
+            aria-hidden="true"
+          />
+        )}
       </button>
     </form>
   );

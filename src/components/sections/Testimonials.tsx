@@ -106,8 +106,7 @@ export default function Testimonials() {
     const track = trackRef.current;
     if (!track) return;
 
-    // Track renders the list twice back to back - animate exactly one
-    // copy's width so the loop point is invisible.
+    
     const singleSetWidth = track.scrollWidth / 2;
 
     const tween = gsap.to(track, {
@@ -152,7 +151,7 @@ export default function Testimonials() {
           ))}
         </div>
 
-        {/* Fade edges so cards don't cut off abruptly against the white bg */}
+        
         <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-white to-transparent lg:w-32" />
         <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-white to-transparent lg:w-32" />
       </div>

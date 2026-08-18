@@ -136,7 +136,7 @@ export default function PrivacyPolicyPage() {
         <p>
           If you have any questions about this Privacy Policy or wish to exercise your rights
           under the Privacy Act 2020, please contact us at{" "}
-          <a href="mailto:hello@thelazymermaid.nz">hello@thelazymermaid.nz</a>.
+          <a href="mailto:Sarah.thelazymermaid@gmail.com">Sarah.thelazymermaid@gmail.com</a>.
         </p>
       </section>
     </LegalPageLayout>
