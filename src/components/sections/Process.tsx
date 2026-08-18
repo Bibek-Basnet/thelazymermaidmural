@@ -230,7 +230,7 @@ export default function Process() {
             The process
           </p>
           <h2 className="mt-2 font-[var(--font-fraunces)] text-2xl font-bold text-magenta lg:text-4xl">
-            Your mural, from hello to hung
+            From blank wall, to big reveal
           </h2>
         </div>
 
