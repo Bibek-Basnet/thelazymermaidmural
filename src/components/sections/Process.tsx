@@ -67,8 +67,8 @@ const STEPS: Step[] = [
     number: "05",
     title: "The reveal",
     description:
-      "A finished artwork, sealed and protected, and a space people suddenly see completely differently.",
-    bullets: ["Protective sealant", "Care guide", "The big unveil"],
+      "A finished artwork, and a space people suddenly see completely differently.",
+    bullets: ["Care guide", "The big unveil"],
     icon: "ti-sparkles",
     color: "#D93E87",
     soft: "#FBEAF0",

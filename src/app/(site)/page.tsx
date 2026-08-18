@@ -8,21 +8,26 @@ import Process from "@/components/sections/Process";
 import Gallery from "@/components/sections/Gallery";
 import FAQ from "@/components/sections/FAQ";
 import Contact from "@/components/sections/Contact";
+import { getFeaturedProjects, getGalleryImages } from "@/sanity/lib/data";
 
-export default function Home() {
+export default async function Home() {
+  const [featuredProjects, galleryItems] = await Promise.all([
+    getFeaturedProjects(),
+    getGalleryImages(),
+  ]);
+
   return (
     <main>
       <Hero />
-      <FeaturedWork />
+      <FeaturedWork projects={featuredProjects} />
       <About />
       <ClientLogos />
       <Services />
       <Testimonials />
       <Process />
-      <Gallery />
+      {galleryItems.length > 0 && <Gallery items={galleryItems} />}
       <FAQ />
       <Contact />
-      
     </main>
   );
 }

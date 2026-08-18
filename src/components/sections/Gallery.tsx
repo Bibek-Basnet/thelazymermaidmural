@@ -10,22 +10,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 type GalleryItem = {
-  image: string;
+  src: string;
   alt: string;
 };
-
-const GALLERY_ITEMS: GalleryItem[] = [
-  { image: "/Gallery/gallery1.jpeg", alt: "Mural detail, close crop" },
-  { image: "/Gallery/gallery2.jpeg", alt: "Community mural in progress" },
-  { image: "/Gallery/gallery3.jpeg", alt: "Full wall mural, wide shot" },
-  { image: "/Gallery/gallery4.jpeg", alt: "Floor mural, overhead view" },
-  { image: "/Gallery/gallery5.jpeg", alt: "Sarah painting on site" },
-  { image: "/Gallery/gallery6.jpeg", alt: "Character detail from a mural" },
-  { image: "/Gallery/gallery7.jpeg", alt: "Commercial mural exterior" },
-  { image: "/Gallery/gallery8.jpeg", alt: "Colour palette close-up" },
-  { image: "/Gallery/gallery9.jpeg", alt: "School mural, full view" },
-  { image: "/Gallery/gallery10.jpeg", alt: "Finished mural, golden hour" },
-];
 
 const containerVariants = {
   hidden: {},
@@ -71,7 +58,7 @@ function GalleryTile({ item }: { item: GalleryItem }) {
       className="group relative aspect-square overflow-hidden rounded-xl"
     >
       <Image
-        src={item.image}
+        src={item.src}
         alt={item.alt}
         fill
         sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw"
@@ -89,7 +76,7 @@ function GalleryTile({ item }: { item: GalleryItem }) {
   );
 }
 
-export default function Gallery() {
+export default function Gallery({ items }: { items: GalleryItem[] }) {
   return (
     <section id="gallery" className="bg-cream px-6 py-20 lg:px-16 lg:py-28">
       <div className="mx-auto max-w-6xl">
@@ -122,8 +109,8 @@ export default function Gallery() {
           variants={containerVariants}
           className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4"
         >
-          {GALLERY_ITEMS.map((item) => (
-            <GalleryTile key={item.image} item={item} />
+          {items.map((item) => (
+            <GalleryTile key={item.src} item={item} />
           ))}
         </motion.div>
       </div>

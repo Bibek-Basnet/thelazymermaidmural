@@ -2,16 +2,11 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import type { Photo } from "@/sanity/lib/data";
 
 const PAGE_SIZE = 24;
 
-export default function ProjectGallery({
-  images,
-  altPrefix,
-}: {
-  images: string[];
-  altPrefix: string;
-}) {
+export default function ProjectGallery({ images }: { images: Photo[] }) {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const visibleImages = images.slice(0, visibleCount);
   const hasMore = visibleCount < images.length;
@@ -19,14 +14,14 @@ export default function ProjectGallery({
   return (
     <div>
       <div className="columns-2 gap-4 lg:columns-3">
-        {visibleImages.map((image, index) => (
+        {visibleImages.map((image) => (
           <div
-            key={image}
+            key={image.src}
             className="relative mb-4 break-inside-avoid overflow-hidden rounded-2xl"
           >
             <Image
-              src={image}
-              alt={`${altPrefix} ${index + 1}`}
+              src={image.src}
+              alt={image.alt}
               width={600}
               height={800}
               sizes="(min-width: 1024px) 33vw, 50vw"

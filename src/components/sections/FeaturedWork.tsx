@@ -4,83 +4,19 @@ import { useRef, useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils/cn";
-
-type Project = {
-  eyebrow: string;
-  title: string;
-  size: string;
-  description: string;
-  image: string;
-  slug: string;
-  fit?: "cover" | "contain";
-};
-
-// Slugs here must match src/lib/data/projects.ts exactly - each card
-// links to that project's detail page and gallery.
-const PROJECTS: Project[] = [
-  {
-    eyebrow: "Creative Bay of Plenty × Tauranga City Council",
-    title: "TV3 Carpark Mural",
-    size: "160 sqm",
-    description:
-      "A full-height carpark facade turned into one of the city's biggest pieces of public colour.",
-    image: "/portfolio/project1.jpeg",
-    slug: "tv3-carpark",
-  },
-  {
-    eyebrow: "Tauranga City Council",
-    title: "'Shell Hop' Interactive Floor Mural",
-    size: "12–18 sqm",
-    description:
-      "A playable floor mural inviting people to hop across a trail of native shells.",
-    image: "/portfolio/project2.jpeg",
-    slug: "shell-hop-floor-mural",
-  },
-  {
-    eyebrow: "The Feel Good Art Club",
-    title: "The Feel Good Art Club Studio",
-    size: "15 sqm",
-    description:
-      "A full studio mural built alongside brand identity work, made to work as one piece.",
-    image: "/portfolio/project6.jpeg",
-    slug: "feel-good-art-club-studio",
-  },
-  {
-    eyebrow: "Welcome Bay Community Centre",
-    title: "'Therapy Room' Mural",
-    size: "15 sqm",
-    description:
-      "A calming, sensory-friendly mural painted alongside local youth, start to finish.",
-    image: "/portfolio/project3.jpeg",
-    slug: "welcome-bay-therapy-room",
-  },
-  {
-    eyebrow: "Tauranga City Council",
-    title: "Te Manawa ō Pāpāmoa School Mural",
-    size: "School artwork",
-    description:
-      "A school mural translating Te Manawa ō Pāpāmoa's values and identity into visual form.",
-    image: "/portfolio/project9.jpeg",
-    slug: "te-manawa-o-papamoa-school",
-  },
-  {
-    eyebrow: "Tauranga City Council",
-    title: "Interactive Floor Mural Series",
-    size: "Tauranga City Centre",
-    description:
-      "A three-part series of playable floor murals, each with its own concept and colour story.",
-    image: "/portfolio/project5.jpeg",
-    slug: "city-centre-floor-mural-series",
-  },
-];
+import type { FeaturedProject } from "@/sanity/lib/data";
 
 const ARTIST_STATEMENT =
   "I love creating joyful, vibrant murals that bring personality and life to a space. Each piece is thoughtfully designed and painted with care, with a focus on quality and individuality. Inspired by my love of nature and colour, I enjoy bringing bold, playful elements to homes, businesses and public spaces.";
 
-const SLIDE_COUNT = PROJECTS.length + 1;
 const AUTOPLAY_INTERVAL = 5500;
 
-export default function FeaturedWork() {
+export default function FeaturedWork({
+  projects,
+}: {
+  projects: FeaturedProject[];
+}) {
+  const slideCount = projects.length + 1;
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -122,7 +58,7 @@ export default function FeaturedWork() {
     const intervalId = window.setInterval(() => {
       if (isPausedRef.current || !isInViewRef.current) return;
       setActiveIndex((prev) => {
-        const next = (prev + 1) % SLIDE_COUNT;
+        const next = (prev + 1) % slideCount;
         const track = trackRef.current;
         const slide = track?.children[next] as HTMLElement | undefined;
         if (track && slide) {
@@ -133,7 +69,7 @@ export default function FeaturedWork() {
     }, AUTOPLAY_INTERVAL);
 
     return () => window.clearInterval(intervalId);
-  }, []);
+  }, [slideCount]);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -218,22 +154,20 @@ export default function FeaturedWork() {
           "scrollbar-none scroll-smooth"
         )}
       >
-        {PROJECTS.map((project, i) => (
+        {projects.map((project, i) => (
           <a
             key={project.slug}
             href={`/portfolio/${project.slug}`}
             className="group relative h-full w-full shrink-0 snap-center overflow-hidden bg-ink lg:w-[85vw] xl:w-[70vw]"
           >
             <Image
-              src={project.image}
+              src={project.coverUrl}
               alt={project.title}
               fill
-              priority={i === 0}
+              loading={i === 0 ? "eager" : undefined}
+              fetchPriority={i === 0 ? "high" : undefined}
               sizes="100vw"
-              className={cn(
-                "transition-transform duration-700 group-hover:scale-105",
-                project.fit === "contain" ? "object-contain" : "object-cover"
-              )}
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/10 to-transparent" />
 
@@ -252,7 +186,7 @@ export default function FeaturedWork() {
                 {project.description}
               </p>
               <p className="mt-3 font-(--font-jakarta) text-xs font-semibold text-lagoon">
-                {project.size}
+                {project.detailLine}
               </p>
             </div>
           </a>
@@ -269,7 +203,7 @@ export default function FeaturedWork() {
           />
 
           <span className="relative font-(--font-fraunces) text-sm font-bold text-cream/70">
-            {String(SLIDE_COUNT).padStart(2, "0")}
+            {String(slideCount).padStart(2, "0")}
           </span>
 
           <div className="relative">
@@ -289,7 +223,7 @@ export default function FeaturedWork() {
       </div>
 
       <div className="relative z-10 flex items-center justify-center gap-2 pt-6">
-        {Array.from({ length: SLIDE_COUNT }).map((_, index) => (
+        {Array.from({ length: slideCount }).map((_, index) => (
           <button
             key={index}
             type="button"

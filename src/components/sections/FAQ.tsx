@@ -43,7 +43,7 @@ const FAQ_ITEMS: FAQItem[] = [
   {
     question: "Will the mural hold up outdoors?",
     answer:
-      "Yes - exterior murals are painted with quality outdoor paints and finished with a protective sealant, so they're built to handle sun, rain and everyday wear.",
+      "Yes - exterior murals are painted with quality outdoor paints, so they're built to handle sun, rain and everyday wear. And if requested, a protective sealant can be added.",
     color: "#FFB162",
   },
 ];
