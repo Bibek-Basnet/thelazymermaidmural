@@ -17,6 +17,8 @@ type SanityPhoto = {
 export type Photo = {
   src: string;
   alt: string;
+  /** Larger rendition for the full-screen lightbox. */
+  full: string;
 };
 
 export type ProjectListItem = {
@@ -73,6 +75,7 @@ function toPhotos(
     .map((photo) => ({
       src: photoUrl(photo, width),
       alt: photo.alt || fallbackAlt,
+      full: photoUrl(photo, 2400),
     }));
 }
 
@@ -228,6 +231,7 @@ export async function getGalleryImages(): Promise<Photo[]> {
     .map(({ image, title }) => ({
       src: photoUrl(image, 800),
       alt: image.alt || title || "Mural photo",
+      full: photoUrl(image, 2400),
     }));
 
   const projectPhotos = projects.flatMap((project) =>

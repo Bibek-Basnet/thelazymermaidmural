@@ -2,22 +2,27 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Lightbox from "@/components/ui/Lightbox";
 import type { Photo } from "@/sanity/lib/data";
 
 const PAGE_SIZE = 24;
 
 export default function ProjectGallery({ images }: { images: Photo[] }) {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const visibleImages = images.slice(0, visibleCount);
   const hasMore = visibleCount < images.length;
 
   return (
     <div>
       <div className="columns-2 gap-4 lg:columns-3">
-        {visibleImages.map((image) => (
-          <div
+        {visibleImages.map((image, index) => (
+          <button
             key={image.src}
-            className="relative mb-4 break-inside-avoid overflow-hidden rounded-2xl"
+            type="button"
+            onClick={() => setLightboxIndex(index)}
+            aria-label={`View photo full screen: ${image.alt}`}
+            className="group relative mb-4 block w-full cursor-zoom-in break-inside-avoid overflow-hidden rounded-2xl"
           >
             <Image
               src={image.src}
@@ -25,9 +30,9 @@ export default function ProjectGallery({ images }: { images: Photo[] }) {
               width={600}
               height={800}
               sizes="(min-width: 1024px) 33vw, 50vw"
-              className="h-auto w-full object-cover"
+              className="h-auto w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             />
-          </div>
+          </button>
         ))}
       </div>
 
@@ -49,6 +54,14 @@ export default function ProjectGallery({ images }: { images: Photo[] }) {
           </button>
         </div>
       )}
+
+      {/* All photos, not just the visible page — arrows can browse the full set. */}
+      <Lightbox
+        photos={images}
+        index={lightboxIndex}
+        onClose={() => setLightboxIndex(null)}
+        onIndexChange={setLightboxIndex}
+      />
     </div>
   );
 }

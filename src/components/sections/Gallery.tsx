@@ -1,18 +1,15 @@
 "use client";
 
-import { useRef, useLayoutEffect } from "react";
+import { useRef, useState, useLayoutEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Lightbox from "@/components/ui/Lightbox";
+import type { Photo } from "@/sanity/lib/data";
 
 gsap.registerPlugin(ScrollTrigger);
-
-type GalleryItem = {
-  src: string;
-  alt: string;
-};
 
 const containerVariants = {
   hidden: {},
@@ -28,7 +25,7 @@ const tileVariants = {
   },
 };
 
-function GalleryTile({ item }: { item: GalleryItem }) {
+function GalleryTile({ item, onOpen }: { item: Photo; onOpen: () => void }) {
   const splashRef = useRef<SVGCircleElement>(null);
   const tileRef = useRef<HTMLDivElement>(null);
 
@@ -72,11 +69,20 @@ function GalleryTile({ item }: { item: GalleryItem }) {
       >
         <circle ref={splashRef} cx="18" cy="18" r="15" fill="#D93E87" opacity="0.85" />
       </svg>
+
+      <button
+        type="button"
+        onClick={onOpen}
+        aria-label={`View photo full screen: ${item.alt}`}
+        className="absolute inset-0 cursor-zoom-in"
+      />
     </motion.div>
   );
 }
 
-export default function Gallery({ items }: { items: GalleryItem[] }) {
+export default function Gallery({ items }: { items: Photo[] }) {
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
   return (
     <section id="gallery" className="bg-cream px-6 py-20 lg:px-16 lg:py-28">
       <div className="mx-auto max-w-6xl">
@@ -109,11 +115,22 @@ export default function Gallery({ items }: { items: GalleryItem[] }) {
           variants={containerVariants}
           className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4"
         >
-          {items.map((item) => (
-            <GalleryTile key={item.src} item={item} />
+          {items.map((item, index) => (
+            <GalleryTile
+              key={item.src}
+              item={item}
+              onOpen={() => setLightboxIndex(index)}
+            />
           ))}
         </motion.div>
       </div>
+
+      <Lightbox
+        photos={items}
+        index={lightboxIndex}
+        onClose={() => setLightboxIndex(null)}
+        onIndexChange={setLightboxIndex}
+      />
     </section>
   );
 }
