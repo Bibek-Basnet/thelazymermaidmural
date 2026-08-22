@@ -1,35 +1,19 @@
 "use client";
 
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { motion } from "framer-motion";
-
-const SERVICE_OPTIONS = [
-  { slug: "commercial-murals", label: "Commercial murals" },
-  { slug: "public-art", label: "Public art" },
-  { slug: "community-projects", label: "Community projects" },
-  { slug: "school-artwork", label: "School artwork" },
-  { slug: "interactive-artwork", label: "Interactive artwork" },
-  { slug: "branded-spaces", label: "Branded spaces" },
-];
-
-const contactSchema = z.object({
-  name: z.string().min(2, "Enter your name"),
-  email: z.string().email("Enter a valid email"),
-  location: z.string().min(2, "Enter your location"),
-  service: z.string().min(1, "Select a service"),
-  wallSize: z.string().optional(),
-  budget: z.string().optional(),
-  message: z.string().min(10, "Tell me a bit more about your project"),
-});
-
-type ContactFormValues = z.infer<typeof contactSchema>;
+import {
+  SERVICE_OPTIONS,
+  contactSchema,
+  type ContactFormValues,
+} from "@/lib/contact";
 
 function ContactForm() {
   const searchParams = useSearchParams();
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const {
     register,
@@ -46,6 +30,7 @@ function ContactForm() {
       wallSize: "",
       budget: "",
       message: "",
+      company: "",
     },
   });
 
@@ -57,9 +42,26 @@ function ContactForm() {
   }, [searchParams, setValue]);
 
   const onSubmit = async (data: ContactFormValues) => {
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    console.log(data);
+    setServerError(null);
+    const response = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      const body = await response.json().catch(() => null);
+      throw new Error(body?.message ?? "The message couldn't be sent.");
+    }
   };
+
+  const submitForm = (event: React.FormEvent<HTMLFormElement>) =>
+    handleSubmit(onSubmit)(event).catch((error: unknown) => {
+      setServerError(
+        error instanceof Error && error.message
+          ? error.message
+          : "Something went wrong. Please try again, or email Sarah.thelazymermaid@gmail.com directly."
+      );
+    });
 
   if (isSubmitSuccessful) {
     return (
@@ -133,7 +135,19 @@ function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="rounded-2xl bg-white p-6 lg:p-8">
+    <form onSubmit={submitForm} className="rounded-2xl bg-white p-6 lg:p-8">
+      {/* Honeypot: invisible to people, bots fill it and get silently dropped. */}
+      <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+        <label htmlFor="company">Company</label>
+        <input
+          id="company"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          {...register("company")}
+        />
+      </div>
+
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="sm:col-span-1">
           <label htmlFor="name" className="mb-1.5 block text-sm font-bold text-ink">
@@ -250,6 +264,15 @@ function ContactForm() {
         </div>
       </div>
 
+      {serverError && (
+        <p
+          role="alert"
+          className="mt-5 rounded-lg bg-coral/10 px-4 py-3 text-sm font-semibold text-coral"
+        >
+          {serverError}
+        </p>
+      )}
+
       <button
         type="submit"
         disabled={isSubmitting}
@@ -276,7 +299,7 @@ export default function Contact() {
             Contact
           </p>
           <h2 className="mt-2 font-[var(--font-fraunces)] text-3xl font-bold text-magenta lg:text-4xl">
-            Let's create something
+            Let&apos;s create something
           </h2>
 
           <p className="mt-5 text-[15px] leading-relaxed text-ink-soft">

@@ -24,6 +24,7 @@
     "react-dom": "19.2.8",
     "react-hook-form": "^7.85.0",
     "react-icons": "^5.7.0",
+    "resend": "^6.22.0",
     "sanity": "^6.9.2",
     "simple-icons": "^16.28.0",
     "tailwind-merge": "^3.6.0",
